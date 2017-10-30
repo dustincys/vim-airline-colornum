@@ -97,6 +97,9 @@ endfunction
 function! s:ShouldRedrawCursorLineNr()
     if s:airline_mode == 'visual' ||
        \ s:last_airline_mode == 'visual' ||
+       \ s:last_airline_mode == 'insert' ||
+       \ s:last_airline_mode == 'normal' ||
+       \ s:last_airline_mode == 'replace' ||
        \ s:last_airline_mode == 'toggledoff' ||
        \ g:airline_theme != s:last_airline_theme ||
        \ s:last_colorscheme != g:colors_name
@@ -142,6 +145,11 @@ function! UpdateCursorLineNr()
                     else
                         call feedkeys("\<left>\<right>", 'n')
                     endif
+		    if line('.') == 1
+			    call feedkeys("\<down>\<up>", 'n')
+		    else
+			    call feedkeys("\<up>\<down>", 'n')
+		    endif
                 endif
 
                 " Save last mode
