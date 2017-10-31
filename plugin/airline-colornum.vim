@@ -95,12 +95,7 @@ endfunction
 "   Force a redraw when toggling Airline back on
 "   Force a redraw when changing Airline theme
 function! s:ShouldRedrawCursorLineNr()
-    if s:airline_mode == 'visual' ||
-       \ s:last_airline_mode == 'visual' ||
-       \ s:last_airline_mode == 'insert' ||
-       \ s:last_airline_mode == 'normal' ||
-       \ s:last_airline_mode == 'replace' ||
-       \ s:last_airline_mode == 'toggledoff' ||
+    if s:airline_mode != s:last_airline_mode ||
        \ g:airline_theme != s:last_airline_theme ||
        \ s:last_colorscheme != g:colors_name
         return 1
@@ -140,16 +135,31 @@ function! UpdateCursorLineNr()
 
                 " Cause the cursor line num to be redrawn to update color
                 if <SID>ShouldRedrawCursorLineNr()
-                    if col('.') == 1
-                        call feedkeys("\<right>\<left>", 'n')
-                    else
-                        call feedkeys("\<left>\<right>", 'n')
-                    endif
-		    if line('.') == 1
-			    call feedkeys("\<down>\<up>", 'n')
-		    else
-			    call feedkeys("\<up>\<down>", 'n')
-		    endif
+			if col('.') == 1
+				if col('$') == 1
+					if line('.') == 1
+						if line('$') == 1
+						    if s:airline_mode == 'normal'
+							call feedkeys("\<C-L>", 'm')
+						    endif
+						    if s:airline_mode == 'insert' ||
+							    \ s:airline_mode == 'replace' ||
+							    \ s:airline_mode == 'visual'
+							call feedkeys("\<SPACE>\<BACKSPACE>", 'm')
+						    endif
+						else
+							call feedkeys("\<down>\<up>", 'n')
+						endif
+					else
+						call feedkeys("\<up>\<down>", 'n')
+					endif
+				else
+					call feedkeys("\<right>\<left>", 'n')
+				endif
+			else
+
+				call feedkeys("\<left>\<right>", 'n')
+			endif
                 endif
 
                 " Save last mode
