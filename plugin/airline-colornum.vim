@@ -135,30 +135,21 @@ function! UpdateCursorLineNr()
 
                 " Cause the cursor line num to be redrawn to update color
                 if <SID>ShouldRedrawCursorLineNr()
-			if col('.') == 1
-				if col('$') == 1
-					if line('.') == 1
-						if line('$') == 1
-						    if s:airline_mode == 'normal'
-							call feedkeys("\<C-L>", 'm')
-						    endif
-						    if s:airline_mode == 'insert' ||
-							    \ s:airline_mode == 'replace' ||
-							    \ s:airline_mode == 'visual'
-							call feedkeys("\<SPACE>\<BACKSPACE>", 'm')
-						    endif
-						else
-							call feedkeys("\<down>\<up>", 'n')
-						endif
-					else
-						call feedkeys("\<up>\<down>", 'n')
+			if line('.') == 1
+				if line('$') == 1
+					if s:airline_mode == 'normal'
+						call feedkeys("\<C-L>", 'm')
+					endif
+					if s:airline_mode == 'insert' ||
+								\ s:airline_mode == 'replace' ||
+								\ s:airline_mode == 'visual'
+						call feedkeys("\<SPACE>\<BACKSPACE>", 'm')
 					endif
 				else
-					call feedkeys("\<right>\<left>", 'n')
+					call feedkeys("\<down>\<up>", 'n')
 				endif
 			else
-
-				call feedkeys("\<left>\<right>", 'n')
+				call feedkeys("\<up>\<down>", 'n')
 			endif
                 endif
 
